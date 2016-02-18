@@ -5,7 +5,7 @@ class TestFile {
 
     private static void incorrectAssignmentInIfCondition() {
         boolean value = false;
-        if (value = true) {
+        if (value = false) {
             //do Something
         } else {
             //else Do Something
@@ -13,22 +13,22 @@ class TestFile {
     }
 
     private static void incorrectComparingToItself() {
-        int x = 3423421;
-        if (x == x) {
+        int x = 3421;
+        if (x <= x) {
             // whatever
         }
     }
 
     private static void anotherVariationOfIncorrectComparingToItself() {
         int x = 567;
-        if (x <= x) {
+        if (x == x) {
             // whatever
         }
     }
 
     private static void onMoreVariationOfIncorrectComparingToItself() {
         int x = 23422;
-        if (x == x) {
+        if (x >= x) {
             // whatever
         }
     }
