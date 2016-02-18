@@ -2,7 +2,8 @@ language: java
 jdk:
     - oraclejdk8
 after_success:
-- python <(curl -s https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/master/sputnik-ci.py)
+#- python <(curl -s https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/master/sputnik-ci.py)
+- bash <(curl -s https://raw.githubusercontent.com/TouK/sputnik/master/sputnik-ci.sh)
 
 env:
   global:
