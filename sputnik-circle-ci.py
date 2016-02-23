@@ -17,6 +17,7 @@ def configure_logger():
 def get_env(single_env):
     try:
         assert (os.environ[single_env])
+        logging.debug('Env variable [' + single_env + ' : ' + os.environ[single_env] + ']')
         return os.environ[single_env]
     except Exception:
         logging.warn("Problem while reading env variable: " + single_env)
@@ -25,7 +26,8 @@ def get_env(single_env):
 
 def is_set_every_required_env_variable():
     logging.info("Check required env variables")
-    required_vars = ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"]
+    # required_vars = ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"]
+    required_vars = ["CIRCLE_PROJECT_REPONAME", "CIRCLE_PROJECT_USERNAME"]
     for env_var in required_vars:
         if get_env(env_var) is None:
             logging.error("Env variable " + env_var + " is required to run sputnik")
