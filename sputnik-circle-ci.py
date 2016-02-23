@@ -54,6 +54,7 @@ def unzip(zip):
 def download_file(url, file_name):
     logging.info("Downloading " + file_name)
     try:
+        logging.debug("url: " + url + ", file_name: " + file_name)
         urllib.urlretrieve(url, filename=file_name)
     except Exception:
         logging.error("Problem while downloading " + file_name + " from " + url)
