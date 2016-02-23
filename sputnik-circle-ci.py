@@ -27,7 +27,7 @@ def get_env(single_env):
 def is_set_every_required_env_variable():
     logging.info("Check required env variables")
     # required_vars = ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"]
-    required_vars = ["CIRCLE_PROJECT_REPONAME", "CIRCLE_PROJECT_USERNAME"]
+    required_vars = ["CI", "CIRCLE_PROJECT_USERNAME", "CIRCLE_PROJECT_REPONAME"]
     for env_var in required_vars:
         if get_env(env_var) is None:
             logging.error("Env variable " + env_var + " is required to run sputnik")
@@ -36,7 +36,8 @@ def is_set_every_required_env_variable():
 
 
 def is_travis_ci():
-    if get_env("CI") == 'true' and get_env("TRAVIS") == 'true' and get_env("TRAVIS_PULL_REQUEST") != "false":
+    # if get_env("CI") == 'true' and get_env("TRAVIS") == 'true' and get_env("TRAVIS_PULL_REQUEST") != "false":
+    if get_env("CI") == 'true':
         return True
     else:
         logging.warn("Stop travis continuous integration. Check evn variables CI: " + get_env("CI")
@@ -61,7 +62,8 @@ def download_file(url, file_name):
 def download_files_and_run_sputnik():
     if is_travis_ci():
         if get_env("api_key"):
-            configs_url = "http://sputnik.touk.pl/conf/" + get_env("TRAVIS_REPO_SLUG") + "/configs?key=" + get_env("api_key")
+            configs_url = "http://sputnik.touk.pl/conf/" + get_env("CIRCLE_PROJECT_USERNAME") + '/' +\
+                          get_env("CIRCLE_PROJECT_REPONAME") + "/configs?key=" + get_env("api_key")
             download_file(configs_url, "configs.zip")
             unzip("configs.zip")
 
