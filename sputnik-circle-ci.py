@@ -74,8 +74,8 @@ def download_files_and_run_sputnik():
 def sputnik_ci():
     configure_logger()
     logging.info('terefere')
-    # if is_set_every_required_env_variable():
-    #     download_files_and_run_sputnik()
+    if is_set_every_required_env_variable():
+        download_files_and_run_sputnik()
 
 
 sputnik_ci()
