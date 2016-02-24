@@ -2,4 +2,4 @@ machine:
     java:
         version: oraclejdk8
     post:
-        - python <(curl -s https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/testSputnik16WithPythonScript/sputnik-circle-ci.py)
+        - python <(curl -s https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/master/sputnik-circle-ci.py)
