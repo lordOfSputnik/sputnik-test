@@ -1,5 +1,6 @@
 machine:
     java:
         version: oraclejdk8
+test:
     post:
         - python <(curl -s https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/master/sputnik-circle-ci.py)
