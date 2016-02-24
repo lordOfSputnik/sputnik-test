@@ -3,4 +3,5 @@ machine:
         version: oraclejdk8
 test:
     override:
-        - python <(curl -s https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/master/sputnik-circle-ci.py)
+        - if [[ ! -z $CI_PULL_REQUEST ]] ; then echo pullRequestAction ; fi
+#        - python <(curl -s https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/master/sputnik-circle-ci.py)
