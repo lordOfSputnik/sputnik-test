@@ -60,6 +60,7 @@ def download_files_and_run_sputnik():
     if is_travis_ci():
         if get_env("api_key"):
             configs_url = "http://sputnik.touk.pl/conf/" + get_env("TRAVIS_REPO_SLUG") + "/configs?key=" + get_env("api_key")
+            logging.info("************************* configs_url: " + configs_url)
             download_file(configs_url, "configs.zip")
             unzip("configs.zip")
 
