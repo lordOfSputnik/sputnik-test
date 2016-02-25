@@ -66,8 +66,8 @@ def download_files_and_run_sputnik():
         if get_env("api_key"):
             configs_url = "http://sputnik.touk.pl/conf/" + get_env("CIRCLE_PROJECT_USERNAME") + '/' +\
                           get_env("CIRCLE_PROJECT_REPONAME") + "/configs?key=" + get_env("api_key")
-            download_file(configs_url, "settings.zip")
-            unzip("settings.zip")
+            download_file(configs_url, "configs.zip")
+            # unzip("configs.zip")
 
         sputnik_jar_url = "http://repo1.maven.org/maven2/pl/touk/sputnik/1.6.0/sputnik-1.6.0-all.jar"
         download_file(sputnik_jar_url, "sputnik.jar")
