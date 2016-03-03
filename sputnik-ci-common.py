@@ -32,14 +32,21 @@ def detect_ci():
         return None
 
 
-def is_set_every_required_env_variable():
-    logging.info("Check required env variables")
-    required_vars = ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"]
+def check_required_env_variables(required_vars):
+    logging.info("Check required env variables: " + required_vars)
     for env_var in required_vars:
         if get_env(env_var) is None:
             logging.error("Env variable " + env_var + " is required to run sputnik")
             return False
     return True
+
+
+def is_set_every_required_env_variable(ci):
+    required_vars = {
+        'TRAVIS' : ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"],
+        'CIRCLECI': ["CI", "CIRCLECI", "CIRCLE_PROJECT_USERNAME", "CIRCLE_PROJECT_REPONAME", "CI_PULL_REQUEST", "CIRCLE_PR_NUMBER"]
+    }
+    return check_required_env_variables(required_vars[ci])
 
 
 def is_travis_ci():
@@ -83,6 +90,7 @@ def sputnik_ci():
     ci = detect_ci()
     logging.info('CI: ' + ci)
 
+    is_set_every_required_env_variable(ci)
 
     # if is_set_every_required_env_variable():
     #     download_files_and_run_sputnik()
