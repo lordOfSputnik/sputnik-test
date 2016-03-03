@@ -33,7 +33,7 @@ def detect_ci():
 
 
 def check_required_env_variables(required_vars):
-    logging.info("Check required env variables: " + required_vars)
+    logging.info("Check required env variables: " + str(required_vars))
     for env_var in required_vars:
         if get_env(env_var) is None:
             logging.error("Env variable " + env_var + " is required to run sputnik")
