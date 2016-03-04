@@ -49,6 +49,7 @@ def check_required_env_variables(required_vars):
 
 
 def is_set_every_required_env_variable():
+    logging.info('***************** ' + ci_name)
     required_vars = {
         'TRAVIS' : ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"],
         'CIRCLECI': ["CI", "CIRCLECI", "CIRCLE_PROJECT_USERNAME", "CIRCLE_PROJECT_REPONAME", "CI_PULL_REQUEST", "CIRCLE_PR_NUMBER"]
