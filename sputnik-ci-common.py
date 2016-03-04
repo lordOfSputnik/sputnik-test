@@ -38,7 +38,7 @@ def detect_ci_service_name():
         ci_service_name = 'TRAVIS'
     elif get_env('CIRCLECI'):
         ci_service_name = 'CIRCLECI'
-    logging.debug('Detected ci service name: ' + ci_service_name)
+    logging.debug('Detected ci service: ' + ci_service_name)
 
 
 def check_required_env_variables(required_vars):
@@ -51,7 +51,6 @@ def check_required_env_variables(required_vars):
 
 
 def is_set_every_required_env_variable():
-    logging.info('***************** ' + ci_service_name)
     required_vars = {
         'TRAVIS' : ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"],
         'CIRCLECI': ["CI", "CIRCLECI", "CIRCLE_PROJECT_USERNAME", "CIRCLE_PROJECT_REPONAME", "CI_PULL_REQUEST", "CIRCLE_PR_NUMBER"]
@@ -122,7 +121,7 @@ def download_files_and_run_sputnik():
             download_file(configs_url, "configs.zip")
             unzip("configs.zip")
 
-        sputnik_jar_url = "http://repo1.maven.org/maven2/pl/`touk/sputnik/1.6.0/sputnik-1.6.0-all.jar"
+        sputnik_jar_url = "http://repo1.maven.org/maven2/pl/touk/sputnik/1.6.0/sputnik-1.6.0-all.jar"
         download_file(sputnik_jar_url, "sputnik.jar")
 
         subprocess.call(['java', '-jar', 'sputnik.jar', '--conf', 'sputnik.properties', '--pullRequestId', pull_request_number])
