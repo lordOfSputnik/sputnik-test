@@ -57,10 +57,14 @@ def is_set_every_required_env_variable(ci):
 
 
 def init_travis_variables():
-    global ci = get_env("CI")
-    global ci_name = get_env("TRAVIS")
-    global pull_request = get_env("TRAVIS_PULL_REQUEST")
-    global repo_slug = get_env("TRAVIS_REPO_SLUG")
+    global ci
+    ci = get_env("CI")
+    global ci_name
+    ci_name = get_env("TRAVIS")
+    global pull_request
+    pull_request = get_env("TRAVIS_PULL_REQUEST")
+    global repo_slug
+    repo_slug = get_env("TRAVIS_REPO_SLUG")
 
 
 def init_variables(ci_name):
