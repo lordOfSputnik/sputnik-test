@@ -2,6 +2,13 @@
 
 import logging, os, subprocess, sys, urllib, zipfile
 
+# variables initiated from ci service env variables
+ci = ''
+ci_name = ''
+pull_request = ''
+repo_slug = ''
+
+
 
 def configure_logger():
     root = logging.getLogger()
@@ -23,7 +30,7 @@ def get_env(single_env):
         return None
 
 
-def detect_ci():
+def detect_ci_service():
     if get_env('TRAVIS'):
         return 'TRAVIS'
     elif get_env('CIRCLECI'):
@@ -49,7 +56,22 @@ def is_set_every_required_env_variable(ci):
     return check_required_env_variables(required_vars[ci])
 
 
-def is_travis_ci():
+def init_travis_variables():
+    global ci = get_env("CI")
+    global ci_name = get_env("TRAVIS")
+    global pull_request = get_env("TRAVIS_PULL_REQUEST")
+    global repo_slug = get_env("TRAVIS_REPO_SLUG")
+
+
+def init_variables(ci_name):
+    if ci_name == 'TRAVIS':
+        init_travis_variables()
+    # elif ci_name == 'CIRCLECI':
+    #     init_circleci_variables()
+
+
+
+def is_pull_request_initiated(ci):
     if get_env("CI") == 'true' and get_env("TRAVIS") == 'true' and get_env("TRAVIS_PULL_REQUEST") != "false":
         return True
     else:
@@ -73,7 +95,7 @@ def download_file(url, file_name):
 
 
 def download_files_and_run_sputnik():
-    if is_travis_ci():
+    if is_pull_request_initiated():
         if get_env("api_key"):
             configs_url = "http://sputnik.touk.pl/conf/" + get_env("TRAVIS_REPO_SLUG") + "/configs?key=" + get_env("api_key")
             download_file(configs_url, "configs.zip")
@@ -87,12 +109,11 @@ def download_files_and_run_sputnik():
 
 def sputnik_ci():
     configure_logger()
-    ci = detect_ci()
-    logging.info('CI: ' + ci)
+    ci_name = detect_ci_service()
+    logging.info('CI: ' + ci_name)
+    init_variables(ci_name)
 
-    is_set_every_required_env_variable(ci)
-
-    # if is_set_every_required_env_variable():
+    # if is_set_every_required_env_variable(ci_name):
     #     download_files_and_run_sputnik()
 
 
