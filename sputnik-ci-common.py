@@ -36,6 +36,7 @@ def detect_ci_service():
         ci_name = 'TRAVIS'
     elif get_env('CIRCLECI'):
         ci_name = 'CIRCLECI'
+    logging.debug('Detected ci: ' + ci_name)
 
 
 def check_required_env_variables(required_vars):
