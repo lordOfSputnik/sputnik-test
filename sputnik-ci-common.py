@@ -2,6 +2,8 @@
 
 import logging, os, subprocess, sys, urllib, zipfile
 
+ci_service_name = ''
+
 # variables initiated from ci service env variables
 ci = ''
 ci_name = ''
@@ -30,13 +32,13 @@ def get_env(single_env):
         return None
 
 
-def detect_ci_service():
-    global ci_name
+def detect_ci_service_name():
+    global ci_service_name
     if get_env('TRAVIS'):
-        ci_name = 'TRAVIS'
+        ci_service_name = 'TRAVIS'
     elif get_env('CIRCLECI'):
-        ci_name = 'CIRCLECI'
-    logging.debug('Detected ci: ' + ci_name)
+        ci_service_name = 'CIRCLECI'
+    logging.debug('Detected ci service name: ' + ci_service_name)
 
 
 def check_required_env_variables(required_vars):
@@ -49,12 +51,12 @@ def check_required_env_variables(required_vars):
 
 
 def is_set_every_required_env_variable():
-    logging.info('***************** ' + ci_name)
+    logging.info('***************** ' + ci_service_name)
     required_vars = {
         'TRAVIS' : ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"],
         'CIRCLECI': ["CI", "CIRCLECI", "CIRCLE_PROJECT_USERNAME", "CIRCLE_PROJECT_REPONAME", "CI_PULL_REQUEST", "CIRCLE_PR_NUMBER"]
     }
-    return check_required_env_variables(required_vars[ci_name])
+    return check_required_env_variables(required_vars[ci_service_name])
 
 
 def init_travis_variables():
@@ -80,7 +82,7 @@ def init_circleci_variables():
 
 
 def init_variables():
-    detect_ci_service()
+    detect_ci_service_name()
     if ci_name == 'TRAVIS':
         init_travis_variables()
     elif ci_name == 'CIRCLECI':
