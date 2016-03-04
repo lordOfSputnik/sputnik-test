@@ -17,7 +17,6 @@ def configure_logger():
 def get_env(single_env):
     try:
         assert (os.environ[single_env])
-        logging.info('Env variable [' + single_env + ' : ' + os.environ[single_env] + ']')
         return os.environ[single_env]
     except Exception:
         logging.warn("Problem while reading env variable: " + single_env)
@@ -26,9 +25,7 @@ def get_env(single_env):
 
 def is_set_every_required_env_variable():
     logging.info("Check required env variables")
-    # required_vars = ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"]
     required_vars = ["CI", "CIRCLECI", "CIRCLE_PROJECT_USERNAME", "CIRCLE_PROJECT_REPONAME", "CI_PULL_REQUEST", "CIRCLE_PR_NUMBER"]
-    # required_vars = ["CI", "CIRCLECI", "CIRCLE_PROJECT_USERNAME", "CIRCLE_PROJECT_REPONAME" ]
     for env_var in required_vars:
         if get_env(env_var) is None:
             logging.error("Env variable " + env_var + " is required to run sputnik")
@@ -38,7 +35,6 @@ def is_set_every_required_env_variable():
 
 def is_travis_ci():
     if get_env("CI") == 'true' and get_env("CIRCLECI") == 'true' and get_env("CI_PULL_REQUEST") != "false":
-    # if get_env("CI") == 'true' and get_env("CIRCLECI") == 'true':
         return True
     else:
         logging.warn("Stop travis continuous integration. Check evn variables CI: " + get_env("CI")
@@ -67,7 +63,7 @@ def download_files_and_run_sputnik():
             configs_url = "http://sputnik.touk.pl/conf/" + get_env("CIRCLE_PROJECT_USERNAME") + '/' +\
                           get_env("CIRCLE_PROJECT_REPONAME") + "/configs?key=" + get_env("api_key")
             download_file(configs_url, "configs.zip")
-            # unzip("configs.zip")
+            unzip("configs.zip")
 
         sputnik_jar_url = "http://repo1.maven.org/maven2/pl/touk/sputnik/1.6.0/sputnik-1.6.0-all.jar"
         download_file(sputnik_jar_url, "sputnik.jar")
@@ -77,7 +73,6 @@ def download_files_and_run_sputnik():
 
 def sputnik_ci():
     configure_logger()
-    logging.info('terefere')
     if is_set_every_required_env_variable():
         download_files_and_run_sputnik()
 
