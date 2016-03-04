@@ -31,12 +31,11 @@ def get_env(single_env):
 
 
 def detect_ci_service():
+    global ci_name
     if get_env('TRAVIS'):
-        return 'TRAVIS'
+        ci_name = 'TRAVIS'
     elif get_env('CIRCLECI'):
-        return 'CIRCLECI'
-    else:
-        return None
+        ci_name = 'CIRCLECI'
 
 
 def check_required_env_variables(required_vars):
