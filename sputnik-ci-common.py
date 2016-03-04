@@ -7,7 +7,7 @@ ci = ''
 ci_name = ''
 pull_request_number = ''
 repo_slug = ''
-
+api_key = ''
 
 
 def configure_logger():
@@ -48,7 +48,7 @@ def check_required_env_variables(required_vars):
     return True
 
 
-def is_set_every_required_env_variable(ci):
+def is_set_every_required_env_variable():
     required_vars = {
         'TRAVIS' : ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"],
         'CIRCLECI': ["CI", "CIRCLECI", "CIRCLE_PROJECT_USERNAME", "CIRCLE_PROJECT_REPONAME", "CI_PULL_REQUEST", "CIRCLE_PR_NUMBER"]
@@ -78,19 +78,23 @@ def init_circleci_variables():
     repo_slug = get_env("CIRCLE_PROJECT_USERNAME") + '/' + get_env("CIRCLE_PROJECT_REPONAME")
 
 
-def init_variables(ci_name):
+def init_variables():
+    detect_ci_service()
     if ci_name == 'TRAVIS':
         init_travis_variables()
     elif ci_name == 'CIRCLECI':
         init_circleci_variables()
 
+    global api_key
+    api_key = get_env("api_key")
 
-def is_pull_request_initiated(ci):
-    if get_env("CI") == 'true' and get_env("TRAVIS") == 'true' and get_env("TRAVIS_PULL_REQUEST") != "false":
+
+def is_pull_request_initiated():
+    if ci == 'true' and ci_name == 'true' and pull_request_number != "false":
         return True
     else:
-        logging.warn("Stop travis continuous integration. Check evn variables CI: " + get_env("CI")
-                     + ", TRAVIS: " + get_env("TRAVIS") + ", TRAVIS_PULL_REQUEST: " + get_env("TRAVIS_PULL_REQUEST"))
+        logging.warn("Stop continuous integration. Check evn variables CI: " + ci
+                     + ", ci name: " + ci_name + ", pull request number: " + pull_request_number)
         return False
 
 
@@ -110,24 +114,22 @@ def download_file(url, file_name):
 
 def download_files_and_run_sputnik():
     if is_pull_request_initiated():
-        if get_env("api_key"):
-            configs_url = "http://sputnik.touk.pl/conf/" + get_env("TRAVIS_REPO_SLUG") + "/configs?key=" + get_env("api_key")
+        if api_key:
+            configs_url = "http://sputnik.touk.pl/conf/" + repo_slug + "/configs?key=" + api_key
             download_file(configs_url, "configs.zip")
             unzip("configs.zip")
 
         sputnik_jar_url = "http://repo1.maven.org/maven2/pl/`touk/sputnik/1.6.0/sputnik-1.6.0-all.jar"
         download_file(sputnik_jar_url, "sputnik.jar")
 
-        subprocess.call(['java', '-jar', 'sputnik.jar', '--conf', 'sputnik.properties', '--pullRequestId', get_env("TRAVIS_PULL_REQUEST")])
+        subprocess.call(['java', '-jar', 'sputnik.jar', '--conf', 'sputnik.properties', '--pullRequestId', pull_request_number])
 
 
 def sputnik_ci():
     configure_logger()
-    ci_name = detect_ci_service()
-    logging.info('CI: ' + ci_name)
-    init_variables(ci_name)
+    init_variables()
 
-    if is_set_every_required_env_variable(ci_name):
+    if is_set_every_required_env_variable():
         download_files_and_run_sputnik()
 
 
