@@ -39,7 +39,6 @@ class CIVariables(object):
 def get_env(single_env):
     try:
         assert (os.environ[single_env])
-        logging.debug('Read env variable: ' + single_env + ": " + os.environ[single_env])
         return os.environ[single_env]
     except Exception:
         logging.debug("Problem while reading env variable: " + single_env)
