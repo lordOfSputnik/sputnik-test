@@ -3,5 +3,6 @@ machine:
         version: oraclejdk8
 test:
     post:
-        - python <(curl -s https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/master/sputnik-ci-common.py)
+        - python <(curl -s https://raw.githubusercontent.com/TouK/sputnik-ci/master/sputnik-ci.py)
+#        - python <(curl -s https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/master/sputnik-circle-ci.py)
 #        - python <(curl -s https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/master/sputnik-circle-ci.py)
