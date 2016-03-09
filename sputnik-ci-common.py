@@ -2,6 +2,7 @@
 
 import logging, os, subprocess, sys, urllib, zipfile
 
+sputnik_version='1.6.1'
 
 class CIVariables(object):
     def __init__(self, ci_service_name=None, ci=None, ci_name=None, pull_request_number=None, repo_slug=None, api_key=None):
@@ -108,11 +109,12 @@ def download_files_and_run_sputnik(ci_variables):
             download_file(configs_url, "configs.zip")
             unzip("configs.zip")
 
-        sputnik_jar_url = "http://repo1.maven.org/maven2/pl/touk/sputnik/1.6.0/sputnik-1.6.0-all.jar"
+        global sputnik_version
+        sputnik_jar_url = "http://repo1.maven.org/maven2/pl/touk/sputnik/1.6.0/sputnik-" + sputnik_version + "1.6.0-all.jar"
         download_file(sputnik_jar_url, "sputnik.jar")
 
-        subprocess.call(['java', '-jar', 'sputnik.jar', '--conf', 'sputnik.properties', '--pullRequestId', ci_variables.pull_request_number])
-
+        subprocess.call(['java', '-jar', 'sputnik.jar', '--conf', 'sputnik.properties', '--pullRequestId',
+                         ci_variables.pull_request_number, '--apiKey', ci_variables.api_key])
 
 def sputnik_ci():
     configure_logger()
