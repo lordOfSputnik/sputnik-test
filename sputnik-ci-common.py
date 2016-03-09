@@ -17,7 +17,10 @@ class CIVariables(object):
                and self.pull_request_number is not None and self.repo_slug is not None
 
     def is_pull_request_initiated(self):
-        return self.ci == 'true' and self.ci_name == 'true' and self.pull_request_number != "false"
+        pull_request_initiated = self.ci == 'true' and self.ci_name == 'true' and self.pull_request_number != "false"
+        if not pull_request_initiated:
+            logging.info('Stop processing as pull request has not been initiated')
+        return pull_request_initiated
 
 
 def configure_logger():
@@ -56,14 +59,6 @@ def check_required_env_variables(required_vars):
             logging.error("Env variable " + env_var + " is required to run sputnik")
             return False
     return True
-
-
-def is_set_every_required_env_variable():
-    required_vars = {
-        'TRAVIS' : ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"],
-        'CIRCLECI': ["CI", "CIRCLECI", "CIRCLE_PROJECT_USERNAME", "CIRCLE_PROJECT_REPONAME", "CI_PULL_REQUEST", "CIRCLE_PR_NUMBER"]
-    }
-    return check_required_env_variables(required_vars[ci_service_name])
 
 
 def init_travis_variables(ci_variables):
