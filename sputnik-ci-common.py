@@ -4,6 +4,18 @@ import logging, os, subprocess, sys, urllib, zipfile
 
 sputnik_version='1.6.1'
 
+
+def configure_logger():
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('[%(levelname)s] %(asctime)s %(message)s')
+    ch.setFormatter(formatter)
+    root.addHandler(ch)
+
+
 class CIVariables(object):
     def __init__(self, ci_service_name=None, ci=None, ci_name=None, pull_request_number=None, repo_slug=None, api_key=None):
         self.ci_service_name = ci_service_name
@@ -24,20 +36,10 @@ class CIVariables(object):
         return pull_request_initiated
 
 
-def configure_logger():
-    root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
-
-    ch = logging.StreamHandler(sys.stdout)
-    ch.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('[%(levelname)s] %(asctime)s %(message)s')
-    ch.setFormatter(formatter)
-    root.addHandler(ch)
-
-
 def get_env(single_env):
     try:
         assert (os.environ[single_env])
+        logging.debug('Read env variable: ' + single_env + ": " + os.environ[single_env])
         return os.environ[single_env]
     except Exception:
         logging.debug("Problem while reading env variable: " + single_env)
