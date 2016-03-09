@@ -2,14 +2,25 @@
 
 import logging, os, subprocess, sys, urllib, zipfile
 
-ci_service_name = ''
 
-# variables initiated from ci service env variables
-ci = ''
-ci_name = ''
-pull_request_number = ''
-repo_slug = ''
-api_key = ''
+class CIVariables(object):
+    def __init__(self, ci_service_name=None, ci=None, ci_name=None, pull_request_number=None, repo_slug=None, api_key=None):
+        self.ci_service_name = ci_service_name
+        self.ci = ci
+        self.ci_name = ci_name
+        self.pull_request_number = pull_request_number
+        self.repo_slug = repo_slug
+        self.api_key = api_key
+
+    def is_set_every_required_env(self):
+        return self.ci_service_name is not None and self.ci is not None and self.ci_name is not None \
+               and self.pull_request_number is not None and self.repo_slug is not None
+
+    def is_pull_request_initiated(self):
+        pull_request_initiated = self.ci == 'true' and self.ci_name == 'true' and self.pull_request_number != "false"
+        if not pull_request_initiated:
+            logging.info('Stop processing as pull request has not been initiated')
+        return pull_request_initiated
 
 
 def configure_logger():
@@ -33,12 +44,12 @@ def get_env(single_env):
 
 
 def detect_ci_service_name():
-    global ci_service_name
     if get_env('TRAVIS'):
-        ci_service_name = 'TRAVIS'
+        return 'TRAVIS'
     elif get_env('CIRCLECI'):
-        ci_service_name = 'CIRCLECI'
-    logging.debug('Detected ci service: ' + ci_service_name)
+        return 'CIRCLECI'
+    else:
+        return None
 
 
 def check_required_env_variables(required_vars):
@@ -50,54 +61,30 @@ def check_required_env_variables(required_vars):
     return True
 
 
-def is_set_every_required_env_variable():
-    required_vars = {
-        'TRAVIS' : ["CI", "TRAVIS", "TRAVIS_PULL_REQUEST", "TRAVIS_REPO_SLUG"],
-        'CIRCLECI': ["CI", "CIRCLECI", "CIRCLE_PROJECT_USERNAME", "CIRCLE_PROJECT_REPONAME", "CI_PULL_REQUEST", "CIRCLE_PR_NUMBER"]
-    }
-    return check_required_env_variables(required_vars[ci_service_name])
+def init_travis_variables(ci_variables):
+    ci_variables.ci = get_env("CI")
+    ci_variables.ci_name = get_env("TRAVIS")
+    ci_variables.pull_request_number = get_env("TRAVIS_PULL_REQUEST")
+    ci_variables.repo_slug = get_env("TRAVIS_REPO_SLUG")
 
 
-def init_travis_variables():
-    global ci
-    ci = get_env("CI")
-    global ci_name
-    ci_name = get_env("TRAVIS")
-    global pull_request_number
-    pull_request_number = get_env("TRAVIS_PULL_REQUEST")
-    global repo_slug
-    repo_slug = get_env("TRAVIS_REPO_SLUG")
-
-
-def init_circleci_variables():
-    global ci
-    ci = get_env("CI")
-    global ci_name
-    ci_name = get_env("CIRCLECI")
-    global pull_request_number
-    pull_request_number = get_env("CIRCLE_PR_NUMBER")
-    global repo_slug
-    repo_slug = get_env("CIRCLE_PROJECT_USERNAME") + '/' + get_env("CIRCLE_PROJECT_REPONAME")
+def init_circleci_variables(ci_variables):
+    ci_variables.ci = get_env("CI")
+    ci_variables.ci_name = get_env("CIRCLECI")
+    ci_variables.pull_request_number = get_env("CIRCLE_PR_NUMBER")
+    ci_variables.repo_slug = get_env("CIRCLE_PROJECT_USERNAME") + '/' + get_env("CIRCLE_PROJECT_REPONAME")
 
 
 def init_variables():
-    detect_ci_service_name()
-    if ci_name == 'TRAVIS':
-        init_travis_variables()
-    elif ci_name == 'CIRCLECI':
-        init_circleci_variables()
+    ci_variables = CIVariables()
+    ci_variables.ci_service_name = detect_ci_service_name()
+    if ci_variables.ci_service_name == 'TRAVIS':
+        init_travis_variables(ci_variables)
+    elif ci_variables.ci_service_name == 'CIRCLECI':
+        init_circleci_variables(ci_variables)
 
-    global api_key
-    api_key = get_env("api_key")
-
-
-def is_pull_request_initiated():
-    if ci == 'true' and ci_name == 'true' and pull_request_number != "false":
-        return True
-    else:
-        logging.warn("Stop continuous integration. Check evn variables CI: " + ci
-                     + ", ci name: " + ci_name + ", pull request number: " + pull_request_number)
-        return False
+    ci_variables.api_key = get_env("api_key")
+    return ci_variables
 
 
 def unzip(zip):
@@ -114,25 +101,25 @@ def download_file(url, file_name):
         logging.error("Problem while downloading " + file_name + " from " + url)
 
 
-def download_files_and_run_sputnik():
-    if is_pull_request_initiated():
-        if api_key:
-            configs_url = "http://sputnik.touk.pl/conf/" + repo_slug + "/configs?key=" + api_key
+def download_files_and_run_sputnik(ci_variables):
+    if ci_variables.is_pull_request_initiated():
+        if ci_variables.api_key:
+            configs_url = "http://sputnik.touk.pl/conf/" + ci_variables.repo_slug + "/configs?key=" + ci_variables.api_key
             download_file(configs_url, "configs.zip")
             unzip("configs.zip")
 
         sputnik_jar_url = "http://repo1.maven.org/maven2/pl/touk/sputnik/1.6.0/sputnik-1.6.0-all.jar"
         download_file(sputnik_jar_url, "sputnik.jar")
 
-        subprocess.call(['java', '-jar', 'sputnik.jar', '--conf', 'sputnik.properties', '--pullRequestId', pull_request_number])
+        subprocess.call(['java', '-jar', 'sputnik.jar', '--conf', 'sputnik.properties', '--pullRequestId', ci_variables.pull_request_number])
 
 
 def sputnik_ci():
     configure_logger()
-    init_variables()
+    ci_variables = init_variables()
 
-    if is_set_every_required_env_variable():
-        download_files_and_run_sputnik()
+    if ci_variables.is_set_every_required_env():
+        download_files_and_run_sputnik(ci_variables)
 
 
 sputnik_ci()
