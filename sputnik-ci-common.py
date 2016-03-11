@@ -16,7 +16,7 @@ def configure_logger():
     root.addHandler(ch)
 
 
-    def xstr(s):
+def xstr(s):
         return lambda s: s or ""
 
 
