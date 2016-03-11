@@ -35,10 +35,14 @@ class CIVariables(object):
             logging.info('Stop processing as pull request has not been initiated')
         return pull_request_initiated
 
+    def xstr(s):
+        return lambda s: s or ""
+
     def show_variables(self):
-        logging.debug('CI variables - \nci_service_name: ' + self.ci_service_name + ', \nci: ' + self.ci
-                      + ', \nci_name: ' + self.ci_name + ', \npull_request_number: ' + self.pull_request_number
-                      + ', \nrepo_slug: ' + self.repo_slug + ', \napi_key: ' + self.api_key)
+        logging.debug('CI variables - \nci_service_name: ' + xstr(self.ci_service_name) + ', \nci: ' + xstr(self.ci)
+                      + ', \nci_name: ' + xstr(self.ci_name) + ', \npull_request_number: ' + xstr(self.pull_request_number)
+                      + ', \nrepo_slug: ' + xstr(self.repo_slug) + ', \napi_key: ' + xstr(self.api_key))
+
 
 def get_env(single_env):
     try:
