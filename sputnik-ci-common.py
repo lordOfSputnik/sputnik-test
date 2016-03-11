@@ -36,8 +36,9 @@ class CIVariables(object):
         return pull_request_initiated
 
     def show_variables(self):
-        logging.debug('CI variables - ci_service_name: ' + self.ci_service_name + ', ci: ' + self.ci + ', ci_name: ' + self.ci_name
-                      + ', pull_request_number: ' + self.pull_request_number + ', repo_slug: ' + self.repo_slug + ', api_key: ' + self.api_key)
+        logging.debug('CI variables - \nci_service_name: ' + self.ci_service_name + ', \nci: ' + self.ci
+                      + ', \nci_name: ' + self.ci_name + ', \npull_request_number: ' + self.pull_request_number
+                      + ', \nrepo_slug: ' + self.repo_slug + ', \napi_key: ' + self.api_key)
 
 def get_env(single_env):
     try:
@@ -125,6 +126,7 @@ def download_files_and_run_sputnik(ci_variables):
 def sputnik_ci():
     configure_logger()
     ci_variables = init_variables()
+    ci_variables.show_variables()
 
     if ci_variables.is_set_every_required_env():
         download_files_and_run_sputnik(ci_variables)
