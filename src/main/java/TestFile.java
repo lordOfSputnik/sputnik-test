@@ -27,7 +27,7 @@ class TestFile {
     }
 
     private static void onMoreVariationOfIncorrectComparingToItself() {
-        int x = 666;
+        int x = 333;
         if (x == x) {
             // whatever
         }
