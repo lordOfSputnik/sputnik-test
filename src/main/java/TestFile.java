@@ -20,7 +20,7 @@ class TestFile {
     }
 
     private static void anotherVariationOfIncorrectComparingToItself() {
-        int x = 567;
+        int x = 999;
         if (x == x) {
             // whatever
         }
