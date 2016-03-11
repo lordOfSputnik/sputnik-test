@@ -35,6 +35,9 @@ class CIVariables(object):
             logging.info('Stop processing as pull request has not been initiated')
         return pull_request_initiated
 
+    def show_variables(self):
+        logging.debug('CI variables - ci_service_name: ' + self.ci_service_name + ', ci: ' + self.ci + ', ci_name: ' + self.ci_name
+                      + ', pull_request_number: ' + self.pull_request_number + ', repo_slug: ' + self.repo_slug + ', api_key: ' + self.api_key)
 
 def get_env(single_env):
     try:
@@ -115,7 +118,7 @@ def download_files_and_run_sputnik(ci_variables):
         logging.debug('Sputnik jar url: ' + sputnik_jar_url)
         download_file(sputnik_jar_url, "sputnik.jar")
 
-        logging.debug('Sputnik env variables: ' + str(ci_variables))
+        ci_variables.show_variables()
         subprocess.call(['java', '-jar', 'sputnik.jar', '--conf', 'sputnik.properties', '--pullRequestId',
                          ci_variables.pull_request_number, '--apiKey', ci_variables.api_key])
 
