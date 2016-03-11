@@ -16,10 +16,6 @@ def configure_logger():
     root.addHandler(ch)
 
 
-def xstr(s):
-        return lambda s: s or ""
-
-
 class CIVariables(object):
     def __init__(self, ci_service_name=None, ci=None, ci_name=None, pull_request_number=None, repo_slug=None, api_key=None):
         self.ci_service_name = ci_service_name
@@ -40,6 +36,7 @@ class CIVariables(object):
         return pull_request_initiated
 
     def show_variables(self):
+        xstr = lambda s: s or ""
         logging.debug('CI variables - \nci_service_name: ' + xstr(self.ci_service_name) + ', \nci: ' + xstr(self.ci)
                       + ', \nci_name: ' + xstr(self.ci_name) + ', \npull_request_number: ' + xstr(self.pull_request_number)
                       + ', \nrepo_slug: ' + xstr(self.repo_slug) + ', \napi_key: ' + xstr(self.api_key))
