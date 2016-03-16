@@ -1,2 +1,1 @@
-## Awesome ##
-# new entry #
+## Getting started ##
