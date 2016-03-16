@@ -1,7 +1,7 @@
 ## Getting started ##
 
 Sputnik supports Java, Groovy and Scala projects build with Maven or Gradle.
-This tutorial shows how to configure and use Sputnik in a few short steps.
+This tutorial shows how to configure and use Sputnik in a few short steps:
 1 - Login to Sputnik with GitHub account
 2 - Authorize Sputnik to use your GitHub account
 3 - Check projects to be analyzed
