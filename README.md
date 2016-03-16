@@ -1,14 +1,17 @@
 ## Getting started ##
 
 Sputnik supports Java, Groovy and Scala projects build with Maven or Gradle.
-This tutorial shows how to configure and use Sputnik in a few short steps:
+This tutorial shows how to configure and use Sputnik in a few short steps.
 
-1. Login to Sputnik with GitHub account
-2. Authorize Sputnik to use your GitHub account
-3. Check projects to be analyzed
-4. Configure your Travis-CI account
-5. Configure Sputnik in your project
-6. Build Project and read Sputnik comments
+Table of contents
+=================
+  * [Login to Sputnik with GitHub account](#login-with-github)
+  * [Authorize Sputnik to use your GitHub account](#authorize-in-github)
+  * [Check projects to be analyzed](#check-projects)
+  * [Configure your Travis-CI or CircleCI account](#configure-ci)
+  * [Configure Sputnik in your project](#configure-sputnik)
+  * [Build Project and read Sputnik comments](#build-project)
+
 
 1. Login to Sputnik with GitHub account
 Go to http://sputnik.touk.pl to log into Sputnik with GitHub account: 
