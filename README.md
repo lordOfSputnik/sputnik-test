@@ -6,27 +6,26 @@ This tutorial shows how to configure and use Sputnik in a few short steps.
 Table of contents
 =================
   * [Login to Sputnik with GitHub account](#login-to-sputnik-with-github-account)
-  * [Authorize Sputnik to use your GitHub account](#authorize-in-github)
-  * [Check projects to be analyzed](#check-projects)
-  * [Configure your Travis-CI or CircleCI account](#configure-ci)
-  * [Configure Sputnik in your project](#configure-sputnik)
-  * [Build Project and read Sputnik comments](#build-project)
+  * [Authorize Sputnik to use your GitHub account](#authorize-sputnik-to-use-your-github-account)
+  * [Check projects to be analyzed](#check-projects-to-be-analyzed)
+  * [Configure your Travis-CI or CircleCI account](#configure-your-travis-ci-or-circleci-account)
+  * [Configure Sputnik in your project](#configure-sputnik-in-your-project)
+  * [Build Project and read Sputnik comments](#build-project-and-read-sputnik-comments)
 
 Login to Sputnik with GitHub account
 ------------------------------------
 Go to http://sputnik.touk.pl to log into Sputnik with GitHub account:
-
-
-
-1. Login to Sputnik with GitHub account
-Go to http://sputnik.touk.pl to log into Sputnik with GitHub account: 
 1_login_with_github.png
 
-2. Authorize Sputnik to use your GitHub account
+
+
+Authorize Sputnik to use your GitHub account
+--------------------------------------------
 Sputnik writes results of code analyses in GitHub, so it needs to have an access to your account.
 2_authorize_application.png
 
-3. Check projects to be analyzed
+Check projects to be analyzed
+-----------------------------
 Go to http://sputnik.touk.pl/app, press Sync Repos to see list of all your GitHub repositories.
 3_sync_repos_check_projects.png
 
@@ -36,11 +35,13 @@ Now check all projects that you'd like to work with Sputnik
 For a selected project you can customize set of rules that will be applied in the code analysis:
 3_project_settings_v1.png
 
-4. Configure your Travis-CI account
+Configure your Travis-CI account
+--------------------------------
 Once you have configured Travis-CI account make sure the projects that have been marked in Sputnik are also selected in Travis-CI:
 4_travis_conf.png
 
-5. Configure Sputnik in your project
+Configure Sputnik in your project
+---------------------------------
 Edit .travis.yml with shell command that starts sputnik analyses
 {code - boldem after_success i następna linijka}
 language: java
@@ -77,7 +78,8 @@ codenarc.excludes=**/*.java
 Podpis: sputnik.properties
 Add checkstyle.xml
 
-6. Build Project and read Sputnik comments
+Build Project and read Sputnik comments
+---------------------------------------
 On every pull-request Sputnik initiates analyses of code that has been changed since the previous build.
 If any Sputnik rule - i.e. Checkstyle, PMD, FindBugs, Scalastyle, Code narc or JSLint - is violated you should expect to see comments in GitHub:
 6_sputnik_rules_violated_comment.png
