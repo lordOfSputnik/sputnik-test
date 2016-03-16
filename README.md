@@ -12,7 +12,7 @@ Table of contents
   * [Configure Sputnik in your project](#configure-sputnik)
   * [Build Project and read Sputnik comments](#build-project)
 
-login-with-github
+##login-with-github##
 =================
 Go to http://sputnik.touk.pl to log into Sputnik with GitHub account:
 
