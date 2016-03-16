@@ -5,7 +5,7 @@ This tutorial shows how to configure and use Sputnik in a few short steps.
 
 Table of contents
 =================
-  * [Login to Sputnik with GitHub account](#login-with-github)
+  * [Login to Sputnik with GitHub account](#login-to-sputnik-with-github-account)
   * [Authorize Sputnik to use your GitHub account](#authorize-in-github)
   * [Check projects to be analyzed](#check-projects)
   * [Configure your Travis-CI or CircleCI account](#configure-ci)
