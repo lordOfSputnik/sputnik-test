@@ -15,7 +15,7 @@ Table of contents
 #### Login to Sputnik with GitHub account
 ------------------------------------
 Go to http://sputnik.touk.pl to log into Sputnik with GitHub account:
-![alt text](https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/master/readme-resources/sputnik_01_v3_login_with_github.png)
+![alt text](https://raw.githubusercontent.com/lordOfSputnik/sputnik-test/master/readme-resources/sputnik_01_v2_login_with_github.png)
 
 
 
